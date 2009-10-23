@@ -4,11 +4,18 @@
 	<label for="id">userid: </label><input id="id" name="id"/><br/>
 	<label for="passw">password: </label><input type="password" id="passw" name="passwd"/>
 	<input type="submit">
+	<script type="text/javascript"> //<![CDATA[
+		$(function(){
+			$('#id').select();
+		});
+	//]]></script>
 </form>
 <?r else ?>
-<table border="1">
-	<tbody>
+<table border='1'>
+	<thead>
 		<tr><th>date/time</th><td>CH</td><td>title</td><td>delete</td></tr>
+	</thead>
+	<tbody>
 		<?r @items.each do |item| ?>
 		<?r next unless item ?>
 		<tr>
@@ -21,7 +28,6 @@
 			</td>
 			<td><button id="#{item[:filename]}" class='delete' name='delete'>delete</button></td>
 		</tr>
-		<p/>
 		<?r end ?>
 	</tbody>
 </table>

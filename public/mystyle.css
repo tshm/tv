@@ -21,6 +21,9 @@ a:hover {
 #flash_message { background: #CCF; color: red; font-weight: bold; }
 .hidden { display: none }
 span.float_right { float: right; }
+thead { background-color: #8F8; }
+tbody { background-color: #DDE; }
+table * { padding: 2px; }
 
 /* video cast elements */
 .player {display:inline;}
