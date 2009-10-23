@@ -16,8 +16,8 @@ class Item
 			h = {}
 			h[:title] = mpgname.sub(/.*\/.+_(.+)_.+\.mpg/,'\1')
 			h[:filename] = flvname.sub(/public/,'')
-			h[:date] = date_ch.sub(/(..)(..)(..)../,'\1.\2.\3')
-			h[:ch] = date_ch[/..$/]
+			h[:date] = date_ch.sub(/^(..)(..)(..)/,'\1.\2.\3')
+			h[:ch] = date_ch.sub(/\d+/,'')
 			h[:hour] = hour
 			h[:min] = min
 			h
