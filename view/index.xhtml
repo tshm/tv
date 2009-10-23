@@ -8,17 +8,18 @@
 <?r else ?>
 <table border="1">
 	<tbody>
-		<tr><th>date/time</th><td>title</td><td>delete</td></tr>
+		<tr><th>date/time</th><td>CH</td><td>title</td><td>delete</td></tr>
 		<?r @items.each do |item| ?>
 		<?r next unless item ?>
 		<tr>
 			<th>#{item[:date]} #{item[:hour]}:#{item[:min]}</th>
+			<td>#{item[:ch]}</td>
 			<td>
 				<div class="player" href="#{item[:filename]}">
 					<a href="#">#{item[:title]}</a>
 				</div>
 			</td>
-			<td> <a href="#">X</a> </td>
+			<td><button id="#{item[:filename]}" class='delete' name='delete'>delete</button></td>
 		</tr>
 		<p/>
 		<?r end ?>
@@ -30,6 +31,12 @@
 		$(".player").click(function(){
 			$(".playing").removeClass("playing");
 			$(this).addClass("playing")
+		});
+		$('.delete').click(function(){
+			var fn = $(this).attr('id');
+			if (confirm("Delete " + fn + "?")) {
+			  document.location = '/delete?id=' + fn;
+			}
 		});
 	});
 	//]]></script>
