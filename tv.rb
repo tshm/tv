@@ -6,7 +6,6 @@ begin
 	#require "date"
 	require 'ramaze/log/informer'
 end
-CONF = YAML.load_file("conf.yml")
 
 class Item
 	def self.list
@@ -32,7 +31,7 @@ class MainController < Ramaze::Controller
 	def index
 		@title = "tv"
 		if request.post?
-			session[:loggedin] = CONF['id']==request[:id] && CONF['passwd']==request[:passwd]
+			session[:loggedin] = !CONF['id'] || (CONF['id']==request[:id] && CONF['passwd']==request[:passwd])
 			redirect('/')
 		else
 			@items = Item.list if session[:loggedin]
