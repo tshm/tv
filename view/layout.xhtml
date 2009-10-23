@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+		<title>#{@title}</title>
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" type="text/css" href="/mystyle.css" />
+		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+		<script>//<![CDATA[
+			google.load("jquery", "1");
+			//]]></script>
+	</head>
+
+	<body>
+		<div id='header'>
+			<h3 id="title">#{@title}</h3>
+			<span id="flash_message">#{flash[:message]}</span>
+		</div>
+		<div id="document-content">
+			#@content
+		</div>
+		<div id="footer">
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,27 @@
+input {background-color: #EEE}
+input:hover {background-color: #AAA}
+input:focus {background-color: #CFF;}
+body {background: #EEE; }
+h1 {color: red}
+h3 {margin: 5px;}
+a:link, a:visited, a:active {
+	color: #00B;
+	text-decoration: none;
+}
+a:hover {
+	color: #00B;
+	background-color: #FFA;
+}
+#header {
+	top: 0; left:0;
+	width: 100%;
+	z-index: 100;
+	background: #EEE none repeat scroll 0 0;
+}
+#flash_message { background: #CCF; color: red; font-weight: bold; }
+.hidden { display: none }
+span.float_right { float: right; }
+
+/* video cast elements */
+.player {display:inline;}
+.playing {display:block; width:400px; height:300px;}

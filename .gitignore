@@ -1,0 +1,5 @@
+conf.yml
+public/video
+*.swp
+tmp*
+tmp
