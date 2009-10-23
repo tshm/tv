@@ -10,6 +10,7 @@
 	<tbody>
 		<tr><th>date/time</th><td>title</td><td>delete</td></tr>
 		<?r @items.each do |item| ?>
+		<?r next unless item ?>
 		<tr>
 			<th>#{item[:date]} #{item[:hour]}:#{item[:min]}</th>
 			<td>

@@ -11,15 +11,16 @@ CONF = YAML.load_file("conf.yml")
 class Item
 	def self.list
 		Dir["public/video/*.flv"].map do |flvname|
-			h = {}
-			h[:filename] = flvname.sub(/public/,'')
 			dum, dum, date_ch, ename, hour, min, ext = flvname.split(/[\/_.]/)
+			mpgname = Dir["public/video/#{date_ch}_*_#{hour}.#{min}.mpg"][0]
+			next unless mpgname
+			h = {}
+			h[:title] = mpgname.sub(/.*\/.+_(.+)_.+\.mpg/,'\1')
+			h[:filename] = flvname.sub(/public/,'')
 			h[:date] = date_ch.sub(/(..)(..)(..)../,'\1.\2.\3')
 			h[:ch] = date_ch[/..$/]
 			h[:hour] = hour
 			h[:min] = min
-			mpgname = Dir["public/video/#{date_ch}_*_#{hour}.#{min}.mpg"][0]
-			h[:title] = mpgname.sub(/.*\/.+_(.+)_.+\.mpg/,'\1')
 			h
 		end
 	end
