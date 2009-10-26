@@ -26,7 +26,10 @@
 					<a href="#">#{item[:title]}</a>
 				</div>
 			</td>
-			<td><button id="#{item[:filename]}" class='delete' name='delete'>delete</button></td>
+			<td>
+				<a href="#{item[:mpgname]}">download</a>
+				<button id="#{item[:filename]}" class='delete' name='delete'>delete</button>
+			</td>
 		</tr>
 		<?r end ?>
 	</tbody>

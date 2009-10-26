@@ -16,6 +16,7 @@ class Item
 			mpgname = Dir["public/video/#{date_ch}_*_#{hour}.#{min}.mpg"][0]
 			next unless mpgname
 			h = {}
+			h[:mpgname] = mpgname.sub(/public\//,'')
 			h[:title] = mpgname.sub(/.*\/.+_(.+)_.+\.mpg/,'\1')
 			h[:filename] = flvname.sub(/public/,'')
 			h[:date] = date_ch.sub(/^(..)(..)(..).*/,'\1.\2.\3')
