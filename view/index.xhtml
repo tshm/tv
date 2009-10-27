@@ -29,7 +29,7 @@
 			</td>
 			<td>
 				<a class='download' href="#{item[:mpgname]}">download</a> / 
-				<a id="#{item[:filename]}" class='delete' href='#'>delete</a>
+				<a class='delete' href="/delete?pathname=#{item[:filename]}">delete</a>
 			</td>
 		</tr>
 		<?r end ?>
@@ -52,12 +52,6 @@
 		$('a.2x').click(function(){
 			$(".playing").removeClass("playing").removeClass("playing-2x");
 			$(this).parent().addClass("playing-2x")
-		});
-		$('a.delete').click(function(){
-			var fn = $(this).attr('id');
-			if (confirm("Delete " + fn + "?")) {
-			  document.location = '/delete?id=' + fn;
-			}
 		});
 	});
 	//]]></script>

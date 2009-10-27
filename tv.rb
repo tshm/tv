@@ -51,7 +51,7 @@ class MainController < Ramaze::Controller
 	end
 
 	def delete
-		a = Item.delete(request[:id])
+		a = Item.delete(request[:pathname])
 		flash[:message] = "Deleted: #{a[0]} & #{a[1]}"
 		redirect_referer
 	end
