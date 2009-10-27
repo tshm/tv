@@ -28,3 +28,4 @@ table * { padding: 2px; }
 /* video cast elements */
 .player {display:inline;}
 .playing {display:block; width:400px; height:300px;}
+.playing-2x {display:block; width:800px; height:600px;}
