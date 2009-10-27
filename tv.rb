@@ -44,7 +44,7 @@ class MainController < Ramaze::Controller
 		@title = "tv"
 		if request.post?
 			session[:loggedin] = !CONF['id'] || (CONF['id']==request[:id] && CONF['passwd']==request[:passwd])
-			redirect('/')
+			redirect_referer
 		else
 			@items = Item.list if session[:loggedin]
 		end
@@ -53,6 +53,6 @@ class MainController < Ramaze::Controller
 	def delete
 		a = Item.delete(request[:id])
 		flash[:message] = "Deleted: #{a[0]} & #{a[1]}"
-		redirect('/')
+		redirect_referer
 	end
 end
