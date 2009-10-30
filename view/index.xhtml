@@ -1,16 +1,4 @@
 <script type="text/javascript" src="/flowplayer/flowplayer-3.1.4.min.js"></script>
-<?r unless session[:loggedin] ?>
-<form id="login" action="/" method="POST">
-	<label for="id">userid: </label><input id="id" name="id"/><br/>
-	<label for="passw">password: </label><input type="password" id="passw" name="passwd"/>
-	<input type="submit">
-	<script type="text/javascript"> //<![CDATA[
-		$(function(){
-			$('#id').select();
-		});
-	//]]></script>
-</form>
-<?r else ?>
 <table border='1'>
 	<thead>
 		<tr><th>date/time</th><td>CH</td><td>title</td><td>download / delete</td></tr>
@@ -55,4 +43,3 @@
 		});
 	});
 	//]]></script>
-<?r end ?>

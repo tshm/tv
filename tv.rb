@@ -39,15 +39,23 @@ end
 
 class MainController < Ramaze::Controller
 	layout :layout
+	helper :aspect, :stack
+	[:index, :delete].each do |link|
+		before(link) { call :login unless session[:loggedin] }
+	end
+
+	def login
+		@title = ""
+		if request.post?
+			session[:loggedin] = !CONF['id'] || (CONF['id']==request[:id] && CONF['passwd']==request[:passwd])
+			sleep 30 unless session[:loggedin]
+			answer if inside_stack?
+		end
+	end
 
 	def index
 		@title = "tv"
-		if request.post?
-			session[:loggedin] = !CONF['id'] || (CONF['id']==request[:id] && CONF['passwd']==request[:passwd])
-			redirect_referer
-		else
-			@items = Item.list if session[:loggedin]
-		end
+		@items = Item.list if session[:loggedin]
 	end
 
 	def delete
