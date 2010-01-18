@@ -1,23 +1,28 @@
 <script type="text/javascript" src="/flowplayer/flowplayer-3.1.4.min.js"></script>
 <table border='1'>
 	<thead>
-		<tr><th>date/time</th><td>CH</td><td>title</td><td>download / delete</td></tr>
+		<tr>
+			<th><a href="/?sort=time">date/time</a></th>
+			<td><a href="/?sort=ch">CH</a></td>
+			<td><a href="/?sort=title">title</a></td>
+			<td>download / delete</td>
+		</tr>
 	</thead>
 	<tbody>
 		<?r @items.each do |item| ?>
-		<?r next unless item ?>
+		<?r next unless item && item.time ?>
 		<tr>
-			<th>#{item[:date]} #{item[:hour]}:#{item[:min]}</th>
-			<td>#{item[:ch]}</td>
+			<th>#{item.time.strftime("%Y/%m/%d %H:%M")}</th>
+			<td>#{item.ch}</td>
 			<td>
 				<div class="player">
-					<a class="link" href="#{item[:filename]}">#{item[:title]}</a>
+					<a class="link" href="#{item.flvname}">#{item.title}</a>
 					<a class="2x" href="#">2x</a>
 				</div>
 			</td>
 			<td>
-				<a class='download' href="#{item[:mpgname]}">download</a> / 
-				<a class='delete' href="/delete?pathname=#{item[:filename]}">delete</a>
+				<a class='download' href="#{item.mpgname}">download</a> / 
+				<a class='delete' href="/delete?pathname=#{item.flvname}">delete</a>
 			</td>
 		</tr>
 		<?r end ?>
