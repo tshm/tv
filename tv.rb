@@ -29,11 +29,7 @@ class Item
 
 	def self.list(sort_key=nil)
 		items = Dir["#{TVDIR}/*.flv"].map {|flvname| Item.new(flvname)}.compact.reject {|i| nil == i.time}
-		if sort_key
-			items.sort_by {|i| i.__send__(sort_key)}
-		else
-			items
-		end
+		sort_key ? items.sort_by {|i| i.__send__(sort_key)} : items
 	end
 
 	def delete
