@@ -61,8 +61,7 @@ class MainController < Ramaze::Controller
 
 	def index
 		@title = "tv"
-		sort_key = request["sort"] ? request["sort"].to_sym : nil
-		@items = Item.list(sort_key) if session[:loggedin]
+		@items = Item.list((request["sort"] || :time).to_sym) if session[:loggedin]
 	end
 
 	def delete
