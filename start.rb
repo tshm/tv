@@ -17,4 +17,7 @@ end
 
 option = {:adapter => :mongrel, :root => '.'}
 option[:port] = CONF['port'] if CONF['port']
-Ramaze.start option
+fork {
+	Process.setsid
+	Ramaze.start option
+}
