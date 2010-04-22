@@ -1,7 +1,6 @@
 begin
 	require "rubygems"
 	require "ramaze"
-	require "yaml"
 	#require "logger"
 	#require "date"
 	require 'ramaze/log/informer'

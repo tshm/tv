@@ -1,8 +1,9 @@
 #!/usr/bin/ruby -Ku
 require 'rubygems'
 require 'ramaze'
+require 'yaml'
 $LOAD_PATH.unshift(__DIR__)  # add project home dir to ruby load_path
-CONF = YAML.load_file("conf.yml") || {}
+CONF = File.exist?("conf.yml") && YAML.load_file("conf.yml") || {}
 require 'tv'
 
 option = {:adapter => :mongrel, :root => '.'}
