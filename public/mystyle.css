@@ -24,6 +24,10 @@ span.float_right { float: right; }
 thead { background-color: #8F8; }
 tbody { background-color: #DDE; }
 table * { padding: 2px; }
+td, th { border: 1px solid; }
+
+/* control */
+#control { text-align: center; }
 
 /* video cast elements */
 .player {display:inline;}
