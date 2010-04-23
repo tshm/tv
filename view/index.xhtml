@@ -59,15 +59,16 @@
 				var time = player.getTime();
 				switch (e.target.id) {
 				case "start": time = 0.0; break;
-				case "revL": time -= 30.0; break;
-				case "rev": time -= 10.0; break;
-				case "fwd": time += 10.0; break;
-				case "fwdL": time += 30.0; break;
+				case "revL":  time -= 30.0; break;
+				case "rev":   time -= 10.0; break;
+				case "fwd":   time += 10.0; break;
+				case "fwdL":  time += 30.0; break;
+				default: return
 				}
-				console.log(time);
 				player.seek(time);
 			});
 		});
 	});
 //]]></script>
-<!-- vim: foldmethod=indent -->
+<!-- vim: foldmethod=indent
+-->
