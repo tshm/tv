@@ -1,0 +1,30 @@
+%script{:type=>"text/javascript", :src=>"/flowplayer/flowplayer-3.1.4.min.js"}
+%script{:type=>"text/javascript", :src=>"/index.js"}
+#control
+  %button#start |&lt;
+  %button#revL  &lt;&lt;
+  %button#rev   &lt;
+  %button#fwd   &gt;
+  %button#fwdL  &gt;&gt;
+%table#list
+  %thead
+    %tr
+      %th date/time
+      %td CH
+      %td title
+      %td DL | Delete
+  %tbody
+    - @items.map do |item|
+      %tr
+        %th= item.time.strftime("%Y/%m/%d %H:%M")
+        %td= item.ch
+        %td
+          .player
+            %a.link{:href=>"#{item.flvname}"}= item.title
+            %a.2x{:href=>"#"} 2x
+        %td
+          %a.download{:href=>"#{item.mpgname}"} DL
+          |
+          %a.delete{:href=>"/delete?pathname=#{item.flvname}"} delete
+:javascript
+  jQuery(function(){ run(); });

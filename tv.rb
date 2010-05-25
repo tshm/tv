@@ -1,11 +1,17 @@
+#!/usr/bin/ruby
 begin
 	require "rubygems"
-	require "ramaze"
-	#require "logger"
-	#require "date"
-	require 'ramaze/log/informer'
+	require "sinatra"
+	require "haml"
+end
+if "live"==ARGV[0]
+	set :environment, :production
+else
+	require "sinatra/reloader"
+	require "ruby-debug"
 end
 TVDIR = "public/video"
+set :haml, {:format => :html5}
 
 # recorded item entity.
 # use ruby internal hash to identify each instance.
@@ -38,30 +44,17 @@ class Item
 	end
 end
 
-class MainController < Ramaze::Controller
-	layout :layout
-	helper :aspect, :stack
-	[:index, :delete].each do |link|
-		before(link) { call :login unless session[:loggedin] }
-	end
+use Rack::Auth::Basic do |username, password|
+	[username, password] == ['tosh', 't30vmi=']
+end
 
-	def login
-		@title = ""
-		if request.post?
-			session[:loggedin] = !CONF['id'] || (CONF['id']==request[:id] && CONF['passwd']==request[:passwd])
-			sleep 30 unless session[:loggedin]
-			answer if inside_stack?
-		end
-	end
+get '/' do
+	@items = Item.list((request["sort"] || :time).to_sym)
+	haml :index
+end
 
-	def index
-		@title = "tv"
-		@items = Item.list((request["sort"] || :time).to_sym) if session[:loggedin]
-	end
-
-	def delete
-		a = Item.new(request[:pathname]).delete
-		flash[:message] = "Deleted: #{a[0]} & #{a[1]}"
-		redirect_referer
-	end
+get '/delete' do
+	a = Item.new(params["pathname"]).delete
+	"Deleted: #{a[0]} & #{a[1]}"
+	redirect_referer
 end

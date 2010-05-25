@@ -1,0 +1,9 @@
+!!!
+%html
+  %head
+    %title= @title
+    %link{:type=>'text/css', :rel=>'stylesheet', :href=>"/mystyle.css"}
+    %script{:type=>"text/javascript", :src=>"http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"}
+  %body
+    = yield
+    %a{:href=>"http://www.ontvjapan.com/"} ontv
