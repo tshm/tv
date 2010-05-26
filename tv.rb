@@ -56,5 +56,5 @@ end
 get '/delete' do
 	a = Item.new(params["pathname"]).delete
 	"Deleted: #{a[0]} & #{a[1]}"
-	redirect_referer
+	redirect '/'
 end
