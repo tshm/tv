@@ -1,0 +1,108 @@
+#!/usr/bin/make -f
+CNF = ./openssl.cnf          # openssl's config file
+DB_FILES = ./DB/index.txt ./DB/serial ./DB/crlnumber
+
+usage:
+	@echo 'General usage.'
+	@echo '  = Setting up CA = '
+	@echo '    "./make_ssl ca.der.crt" will create ca.key, ca.crt and ca.der.crt.'
+	@echo '    Distribute "ca.der.crt" to end users to import it into their CA list.'
+	@echo '  = Prep/renew web server certificate. = '
+	@echo '    "./make_ssl server.crt" to create server.key and server.crt.'
+	@echo '    Copy them into web server config dir.'
+	@echo '    Renew the server.crt as it expires in 365 days.'
+	@echo '    "./make_ssl renew" to revoke the old one and create new server.crt'
+	@echo
+	@echo 'target files'
+	@echo '  ca.key        : CA private key'
+	@echo '  ca.crt        : CA self-signed certificate'
+	@echo '  ca.der.crt    : ca.crt for safe distribution'
+	@echo '  server.key    : server private key'
+	@echo '  server.crt    : server certificate signed by CA'
+	@echo '  server.csr    : server certificate request'
+
+## CA
+$(DB_FILES):
+	-mkdir ./DB
+	:> ./DB/index.txt
+	echo '01' > ./DB/serial
+	echo '01' > ./DB/crlnumber
+
+ca.key: 
+	openssl genrsa -out $@ 1024
+
+ca.crt: ca.key $(CNF)
+	openssl req -new -x509 -days 3560 -nodes -key $< -out $@ -config $(CNF)
+
+ca.der.crt: ca.crt
+	openssl x509 -inform pem -in $< -out $@ -outform der
+
+server.crt: server.csr ca.crt ca.key $(CNF)
+	openssl ca -config $(CNF) -outdir ./DB -out $@ -cert ca.crt -keyfile ca.key -infiles $<
+
+## server private key and certificate
+server.key:
+	openssl genrsa -out $@ 1024
+
+server.csr: server.key $(CNF) $(DB_FILES)
+	openssl req -new -key $< -out $@ -config $(CNF)
+
+#server.crt: $(CNF) server.key
+#	openssl req -new -x509 -days 3650 -nodes -key server.key -out server.crt -config $(CNF)
+
+## common config file
+$(CNF):
+	@echo 'RANDFILE  = $$ENV::HOME/.rnd'                       > $@
+	@echo '[ ca ]'                                            >> $@
+	@echo 'default_ca	= CA_webpatent'                         >> $@
+	@echo ''                                                  >> $@
+	@echo '[ CA_webpatent ]'                                  >> $@
+	@echo 'dir = ./CA'                                        >> $@
+	@echo 'database = ./DB/index.txt'                         >> $@
+	@echo 'serial = ./DB/serial'                              >> $@
+	@echo 'crlnumber = ./DB/crlnumber'                        >> $@
+	@echo 'default_days	= 365'                                >> $@
+	@echo 'default_crl_days= 30'                              >> $@
+	@echo 'default_md	= sha1'                                 >> $@
+	@echo 'policy		= policy_anything'                        >> $@
+	@echo ''                                                  >> $@
+	@echo '[ policy_anything ]'                               >> $@
+	@echo 'countryName		= optional'                         >> $@
+	@echo 'stateOrProvinceName	= optional'                   >> $@
+	@echo 'organizationName	= optional'                       >> $@
+	@echo 'organizationalUnitName	= optional'                 >> $@
+	@echo 'commonName		= supplied'                           >> $@
+	@echo 'emailAddress		= optional'                         >> $@
+	@echo ''                                                  >> $@
+	@echo '[ req ]'                                           >> $@
+	@echo 'default_bits           = 1024'                     >> $@
+	@echo 'default_keyfile        = server.key'               >> $@
+	@echo 'distinguished_name     = req_distinguished_name'   >> $@
+	@echo 'prompt                 = no'                       >> $@
+	@echo ''                                                  >> $@
+	@echo '[ req_distinguished_name ]'                        >> $@
+	@echo 'countryName            = US'                       >> $@
+	@echo 'stateOrProvinceName    = Connecticut'              >> $@
+	@echo 'localityName           = Stamford'                 >> $@
+	@echo 'organizationName       = HIT'                      >> $@
+	@echo 'organizationalUnitName = Engineering'              >> $@
+	@echo 'commonName             = hit.homelinux.net'        >> $@
+	@echo 'emailAddress           = 2sm@csc.jp'               >> $@
+
+revoke: $(CNF)
+	openssl ca -config $(CNF) -revoke server.crt -keyfile ca.key -cert ca.crt
+
+renew: revoke server.crt
+
+clean: 
+	rm -f server.crt $(CNF)
+
+purge:
+	rm -rf index.txt serial $(CNF) ca.* server.* DB
+
+verify: 
+	openssl verify -CAfile ca.crt server.crt
+	openssl verify -CAfile ca.crt ca.crt
+
+.PHONY: usage revoke renew clean purge verify
+
