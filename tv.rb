@@ -23,7 +23,7 @@ class Item
 		mpgname = Dir["#{TVDIR}/#{date_ch}_*_#{hour}.#{min}.mpg"][0]
 		return nil unless mpgname
 		h = {}
-		@mpgname = mpgname.sub(/public\//,'')
+		@mpgname = mpgname.sub(/public/,'')
 		@title = mpgname.sub(/.*\/.+_(.+)_.+\.mpg/,'\1')
 		@flvname = flvname.sub(/public/,'')
 		@ch = date_ch.sub(/\d+/,'')

@@ -1,8 +1,9 @@
 function run() {
 	$('.delete').click(function(e){
 		var row = $(this).closest('tr');
-		var filename = $('a.link', row).attr('href');
 		if (!confirm('Are you sure?')) return;
+		$('.playing', row).unload();
+		var filename = $('a.flv', row).attr('href');
 		$.get("/delete?pathname="+filename, function() {
 			row.stop().remove();
 			return;
@@ -18,8 +19,7 @@ function run() {
 			plugins: { nginx: { url: '/flowplayer/flowplayer.pseudostreaming-3.2.5.swf' } }
 		});
 	}).click(function(e){
-		//console.log( e.target );
-		$(".playing").removeClass("playing").removeClass("playing-2x");
+		$('.player').removeClass("playing").removeClass("playing-2x");
 		if ("2x" == $(e.target).attr('class')) {
 			$(this).addClass("playing-2x")
 		} else {

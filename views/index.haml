@@ -23,8 +23,12 @@
             %a.link{:href=>"#{item.flvname}"}= item.title
             %a.2x{:href=>"#"} 2x
         %td
-          %a.download{:href=>"#{item.mpgname}"} DL
-          |
+          DL[
+          %span
+            %a.flv{:href=>"#{item.flvname}"} f
+            |
+            %a.mpg{:href=>"#{item.mpgname}"} m
+          ]
           %a.delete{:href=>'#'} delete
 :javascript
   jQuery(function(){ run(); });
