@@ -2,9 +2,12 @@ function run() {
 	$('.delete').click(function(e){
 		var row = $(this).closest('tr');
 		var filename = $('a.link', row).attr('href');
+		if (!confirm('Are you sure?')) return;
 		$.get("/delete?pathname="+filename, function() {
-			row.remove();
+			row.stop().remove();
+			return;
 		});
+		(function() {row.fadeToggle('slow', arguments.callee);})(); //animate
 	});
 	var control = $('#control').remove();
 	$('.player').each(function(){
