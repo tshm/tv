@@ -1,4 +1,11 @@
 function run() {
+	$('.delete').click(function(e){
+		var row = $(this).closest('tr');
+		var filename = $('a.link', row).attr('href');
+		$.get("/delete?pathname="+filename, function() {
+			row.remove();
+		});
+	});
 	var control = $('#control').remove();
 	$('.player').each(function(){
 		var container = $(this);
