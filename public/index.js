@@ -13,9 +13,9 @@ function run() {
 	$('.player').each(function(){
 		var container = $(this);
 		var url = $('a.link', this).attr('href');
-		container.flowplayer("flowplayer/flowplayer-3.1.3.swf", {
+		container.flowplayer("flowplayer/flowplayer-3.2.5.swf", {
 			clip: { url: url, provider: 'nginx' },
-			plugins: { nginx: { url: '/flowplayer/flowplayer.pseudostreaming-3.1.3.swf' } }
+			plugins: { nginx: { url: '/flowplayer/flowplayer.pseudostreaming-3.2.5.swf' } }
 		});
 	}).click(function(e){
 		//console.log( e.target );
