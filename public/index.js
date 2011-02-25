@@ -9,18 +9,19 @@ function run() {
 			return;
 		});
 		(function() {row.fadeToggle('slow', arguments.callee);})(); //animate
-	});
+	}).button({text: false, icons: {primary: "ui-icon-trash"}});
 	var control = $('#control').remove();
 	$('.player').each(function(){
 		var container = $(this);
-		var url = $('a.link', this).attr('href');
+		var url = $('a.link', this).button({icons:{primary:'ui-icon-play'}}).attr('href');
+		$('a.2x', this).button({text: false, icons:{primary:'ui-icon-arrow-4-diag'}}).parent().buttonset();
 		container.flowplayer("flowplayer/flowplayer-3.2.5.swf", {
 			clip: { url: url, provider: 'nginx' },
 			plugins: { nginx: { url: '/flowplayer/flowplayer.pseudostreaming-3.2.5.swf' } }
 		});
 	}).click(function(e){
 		$('.player').removeClass("playing").removeClass("playing-2x");
-		if ("2x" == $(e.target).attr('class')) {
+		if ($(e.target).closest('a').attr('class').match("2x")) {
 			$(this).addClass("playing-2x")
 		} else {
 			$(this).addClass("playing")
@@ -38,6 +39,17 @@ function run() {
 			default: return
 			}
 			player.seek(time);
-		});
+		}).find('button').button();
 	});
+	// buttonize all links
+	$('a.flv').button({text: false, icons: {primary: 'ui-icon-video'}})
+	.next().button({text: false, icons: {primary: 'ui-icon-script'}})
+	.parent().buttonset();
+	$('#ontv').button({icons:{primary:'ui-icon-extlink'}});
+	/* setup dialog box
+	$('#dialog-delete').dialog({
+		resizable: false,
+		height: 140,
+		modal: true,
+	});*/
 }

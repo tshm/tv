@@ -21,14 +21,15 @@
         %td
           .player
             %a.link{:href=>"#{item.flvname}"}= item.title
-            %a.2x{:href=>"#"} 2x
+            %a.2x{:href=>"#"} play 2x
         %td
-          DL[
           %span
-            %a.flv{:href=>"#{item.flvname}"} f
-            |
-            %a.mpg{:href=>"#{item.mpgname}"} m
-          ]
-          %a.delete{:href=>'#'} delete
+            %a.flv{:href=>"#{item.flvname}"} download flv
+            %a.mpg{:href=>"#{item.mpgname}"} download mpg
+          %button.delete DELETE
+/#dialog-delete{:title=>'Delete Confirmation'}
+/  %span Are you sure to delete?
+/  %button.delete DELETE
+/  %button CANCEL
 :javascript
-  jQuery(function(){ run(); });
+  jQuery(run);
