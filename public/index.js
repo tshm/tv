@@ -15,9 +15,9 @@ function run() {
 		var container = $(this);
 		var url = $('a.link', this).button({icons:{primary:'ui-icon-play'}}).attr('href');
 		$('a.2x', this).button({text: false, icons:{primary:'ui-icon-arrow-4-diag'}}).parent().buttonset();
-		container.flowplayer("flowplayer/flowplayer-3.2.5.swf", {
+		container.flowplayer("flowplayer/flowplayer-3.2.7.swf", {
 			clip: { url: url, provider: 'nginx' },
-			plugins: { nginx: { url: '/flowplayer/flowplayer.pseudostreaming-3.2.5.swf' } }
+			plugins: { nginx: { url: '/flowplayer/flowplayer.pseudostreaming-3.2.7.swf' } }
 		});
 	}).click(function(e){
 		$('.player').removeClass("playing").removeClass("playing-2x");
