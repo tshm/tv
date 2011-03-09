@@ -8,7 +8,6 @@ function run() {
 			row.stop().remove();
 			return;
 		});
-		//(function() {row.fadeToggle('slow', arguments.callee);})(); //animate
 	}).button({text: false, icons: {primary: "ui-icon-trash"}});
 	var control = $('#control').remove();
 	$('.player').each(function(){
@@ -31,12 +30,12 @@ function run() {
 			var player = $f();
 			var time = player.getTime();
 			switch (e.target.id) {
-			case "start": time = 0.0; break;
+			case "start": time  =  0.0; break;
 			case "revL":  time -= 30.0; break;
 			case "rev":   time -= 10.0; break;
 			case "fwd":   time += 10.0; break;
 			case "fwdL":  time += 30.0; break;
-			default: return
+			default: return;
 			}
 			player.seek(time);
 		}).find('button').button();
@@ -46,10 +45,4 @@ function run() {
 	.next().button({text: false, icons: {primary: 'ui-icon-script'}})
 	.parent().buttonset();
 	$('#ontv').button({icons:{primary:'ui-icon-extlink'}});
-	/* setup dialog box
-	$('#dialog-delete').dialog({
-		resizable: false,
-		height: 140,
-		modal: true,
-	});*/
 }
