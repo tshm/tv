@@ -8,7 +8,7 @@ function run() {
 			row.stop().remove();
 			return;
 		});
-		(function() {row.fadeToggle('slow', arguments.callee);})(); //animate
+		//(function() {row.fadeToggle('slow', arguments.callee);})(); //animate
 	}).button({text: false, icons: {primary: "ui-icon-trash"}});
 	var control = $('#control').remove();
 	$('.player').each(function(){
