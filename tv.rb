@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 begin
 	require "rubygems"
+	require "bundler/setup"
 	require "sinatra"
 	require "haml"
 end
