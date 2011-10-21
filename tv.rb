@@ -52,6 +52,9 @@ enable :sessions
 
 helpers do
 	def loggedin?; session[:loggedin]; end
+	def authenticate(email)
+		session[:loggedin] = USER == email
+	end
 end
 
 get '/' do
@@ -63,8 +66,7 @@ post '/login' do
   if resp = request.env["rack.openid.response"]
 		if resp.status == :success
 			ax = OpenID::AX::FetchResponse.from_success_response(resp);
-			pp ax
-			session[:loggedin] = USER == ax["http://axschema.org/contact/email"][0]
+			authenticate(ax["http://axschema.org/contact/email"][0])
 			redirect '/'
 		end
   else
@@ -77,7 +79,7 @@ post '/login' do
 end
 
 get '/logout' do
-	session[:loggedin] = false
+	authenticate(nil)
 	redirect '/'
 end
 
