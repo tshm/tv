@@ -1,18 +1,17 @@
 #!/usr/bin/ruby
 begin
 	require "rubygems"
-	require "bundler/setup"
-	require "sinatra"
+	#require "bundler/setup"
 	require "haml"
+	require "sinatra"
 end
 if "live"==ARGV[0]
 	set :environment, :production
 else
 	require "sinatra/reloader"
-	require "ruby-debug"
+	require "pp"
 end
 TVDIR = "public/video"
-set :haml, {:format => :html5}
 
 # recorded item entity.
 # use ruby internal hash to identify each instance.
@@ -45,8 +44,14 @@ class Item
 	end
 end
 
-use Rack::Auth::Basic do |username, password|
-	[username, password] == ['tosh', 't30vmi=']
+USER = "shimayama@gmail.com"
+use Rack::Session::Cookie
+require "rack/openid"
+use Rack::OpenID
+enable :sessions
+
+helpers do
+	def loggedin?; session[:loggedin]; end
 end
 
 get '/' do
@@ -54,7 +59,31 @@ get '/' do
 	haml :index
 end
 
+post '/login' do
+  if resp = request.env["rack.openid.response"]
+		if resp.status == :success
+			ax = OpenID::AX::FetchResponse.from_success_response(resp);
+			pp ax
+			session[:loggedin] = USER == ax["http://axschema.org/contact/email"][0]
+			redirect '/'
+		end
+  else
+		headers 'WWW-Authenticate' => Rack::OpenID.build_header(
+			:identifier => "www.google.com/accounts/o8/id",
+			:required => ["http://axschema.org/contact/email"]
+		)
+    throw :halt, [401, 'openid auth failure']
+  end
+end
+
+get '/logout' do
+	session[:loggedin] = false
+	redirect '/'
+end
+
 get '/delete' do
-	a = Item.new(params["pathname"]).delete
-	"Deleted: #{a[0]} & #{a[1]}"
+	if loggedin?
+		a = Item.new(params["pathname"]).delete
+		"Deleted: #{a[0]} & #{a[1]}"
+	end
 end

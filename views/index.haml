@@ -1,35 +1,39 @@
 %script{:type=>"text/javascript", :src=>"/flowplayer/flowplayer-3.2.6.min.js"}
 %script{:type=>"text/javascript", :src=>"/index.js"}
-#control
-  %button#start |&lt;
-  %button#revL  &lt;&lt;
-  %button#rev   &lt;
-  %button#fwd   &gt;
-  %button#fwdL  &gt;&gt;
-%table#list
-  %thead
-    %tr
-      %th date/time
-      %td CH
-      %td title
-      %td DL | Delete
-  %tbody
-    - @items.map do |item|
+- unless loggedin?
+  %form{:action=>'/login', :method=>'post'}
+    %input{:type=>'submit', :value=>'login'}
+- else
+  #control
+    %button#start |&lt;
+    %button#revL  &lt;&lt;
+    %button#rev   &lt;
+    %button#fwd   &gt;
+    %button#fwdL  &gt;&gt;
+  %table#list
+    %thead
       %tr
-        %th= item.time.strftime("%Y/%m/%d %H:%M")
-        %td= item.ch
-        %td
-          .player
-            %a.link{:href=>"#{item.flvname}"}= item.title
-            %a.2x{:href=>"#"} play 2x
-        %td
-          %span
-            %a.flv{:href=>"#{item.flvname}"} download flv
-            %a.mpg{:href=>"#{item.mpgname}"} download mpg
-          %button.delete DELETE
-/#dialog-delete{:title=>'Delete Confirmation'}
-/  %span Are you sure to delete?
-/  %button.delete DELETE
-/  %button CANCEL
-:javascript
-  jQuery(run);
+        %th date/time
+        %td CH
+        %td title
+        %td DL | Delete
+    %tbody
+      - @items.map do |item|
+        %tr
+          %th= item.time.strftime("%Y/%m/%d %H:%M")
+          %td= item.ch
+          %td
+            .player
+              %a.link{:href=>"#{item.flvname}"}= item.title
+              %a.2x{:href=>"#"} play 2x
+          %td
+            %span
+              %a.flv{:href=>"#{item.flvname}"} download flv
+              %a.mpg{:href=>"#{item.mpgname}"} download mpg
+            %button.delete DELETE
+  /#dialog-delete{:title=>'Delete Confirmation'}
+  /  %span Are you sure to delete?
+  /  %button.delete DELETE
+  /  %button CANCEL
+  :javascript
+    jQuery(run);
