@@ -12,6 +12,7 @@ else
 	require "pp"
 end
 TVDIR = "public/video"
+set :haml, {:format => :html5}
 
 # recorded item entity.
 # use ruby internal hash to identify each instance.
@@ -51,7 +52,9 @@ use Rack::OpenID
 enable :sessions
 
 helpers do
-	def loggedin?; session[:loggedin]; end
+	def loggedin?
+		:development == Sinatra::Application.environment or session[:loggedin]
+	end
 	def authenticate(email)
 		session[:loggedin] = USER == email
 	end
