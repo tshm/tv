@@ -4,12 +4,6 @@
   %form(action='/login' method='post')
     %input(type='submit' value='login')
 - else
-  #control
-    %button#start |&lt;
-    %button#revL  &lt;&lt;
-    %button#rev   &lt;
-    %button#fwd   &gt;
-    %button#fwdL  &gt;&gt;
   %table#list
     %thead
       %tr
@@ -19,11 +13,11 @@
         %td DL | Delete
     %tbody
       - @items.map do |item|
-        %tr
+        %tr(data-title="#{item.title}" data-url="#{item.flvname}")
           %th= item.time.strftime("%Y/%m/%d %H:%M")
           %td= item.ch
           %td
-            .player
+            .playbuttons
               %a.link(href="#{item.flvname}")= item.title
               %a.2x(href="#") play 2x
           %td
@@ -31,9 +25,13 @@
               %a.flv(href="#{item.flvname}") download flv
               %a.mpg(href="#{item.mpgname}") download mpg
             %button.delete DELETE
-  /#dialog-delete(title='Delete Confirmation')
-  /  %span Are you sure to delete?
-  /  %button.delete DELETE
-  /  %button CANCEL
+  #videodialog.hidden
+    #player.playing
+    #control
+      %button#start |&lt;
+      %button#revL  &lt;&lt;
+      %button#rev   &lt;
+      %button#fwd   &gt;
+      %button#fwdL  &gt;&gt;
   :javascript
     jQuery(run);

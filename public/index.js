@@ -1,31 +1,41 @@
 function run() {
+	// video player dialog
+	var control = $('#control').find('button').button();
+	var videodialog = $('#videodialog');
+	videodialog.dialog({autoOpen:false, modal:true, position:[0,0]});
+	var playerelem = $('#player');
+	// Delete button binding
 	$('.delete').click(function(e){
 		var row = $(this).closest('tr');
 		if (!confirm('Are you sure?')) return;
-		$('.playing', row).unload();
-		var filename = $('a.flv', row).attr('href');
+		var filename = row.data("url");
 		$.get("/delete?pathname="+filename, function() {
-			row.stop().remove();
+			row.remove();
 			return;
 		});
 	}).button({text: false, icons: {primary: "ui-icon-trash"}});
-	var control = $('#control').remove();
-	$('.player').each(function(){
-		var container = $(this);
-		var url = $('a.link', this).button({icons:{primary:'ui-icon-play'}}).attr('href');
-		$('a.2x', this).button({text: false, icons:{primary:'ui-icon-arrow-4-diag'}}).parent().buttonset();
-		container.flowplayer("flowplayer/flowplayer-3.2.7.swf", {
-			clip: { url: url, provider: 'nginx' },
+	// start buttons / event handling
+	$('.playbuttons').each(function(){
+		$('a.link', this).button({icons:{primary:'ui-icon-play'}});
+		$('a.2x', this).button({text:false, icons:{primary:'ui-icon-arrow-4-diag'}})
+			.parent().buttonset();
+	}).click(function(e){
+		var row = $(e.target).closest("tr");
+		playerelem.removeClass("playing").removeClass("playing-2x");
+		if ($(e.target).closest('a').attr('class').match("2x")) {
+			playerelem.addClass("playing-2x")
+		} else {
+			playerelem.addClass("playing")
+		}
+		videodialog.dialog("open");
+		videodialog.dialog("option", {
+			width: playerelem.width() + 30, 
+			title: row.data("title")
+		});
+		playerelem.flowplayer("flowplayer/flowplayer-3.2.7.swf", {
+			clip: { url: row.data("url"), provider: 'nginx' },
 			plugins: { nginx: { url: '/flowplayer/flowplayer.pseudostreaming-3.2.7.swf' } }
 		});
-	}).click(function(e){
-		$('.player').removeClass("playing").removeClass("playing-2x");
-		if ($(e.target).closest('a').attr('class').match("2x")) {
-			$(this).addClass("playing-2x")
-		} else {
-			$(this).addClass("playing")
-		}
-		$(this).after(control);
 		control.click(function(e){
 			var player = $f();
 			var time = player.getTime();
@@ -38,7 +48,8 @@ function run() {
 			default: return;
 			}
 			player.seek(time);
-		}).find('button').button();
+		});
+		return false;
 	});
 	// buttonize all links
 	$('a.flv').button({text: false, icons: {primary: 'ui-icon-video'}})
