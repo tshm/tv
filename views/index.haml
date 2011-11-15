@@ -13,16 +13,16 @@
         %td DL | Delete
     %tbody
       - @items.map do |item|
-        %tr(data-title="#{item.title}" data-url="#{item.flvname}")
+        %tr(data-title="#{item.title}" data-url="#{item.url}")
           %th= item.time.strftime("%Y/%m/%d %H:%M")
           %td= item.ch
           %td
             .playbuttons
-              %a.link(href="#{item.flvname}")= item.title
+              %a.link(href="#{item.url}")= item.title
               %a.2x(href="#") play 2x
           %td
             %span
-              %a.flv(href="#{item.flvname}") download flv
+              %a.url(href="#{item.url}") download
               %a.mpg(href="#{item.mpgname}") download mpg
             %button.delete DELETE
   #videodialog.hidden

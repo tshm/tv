@@ -52,7 +52,7 @@ function run() {
 		return false;
 	});
 	// buttonize all links
-	$('a.flv').button({text: false, icons: {primary: 'ui-icon-video'}})
+	$('a.url').button({text: false, icons: {primary: 'ui-icon-video'}})
 	.next().button({text: false, icons: {primary: 'ui-icon-script'}})
 	.parent().buttonset();
 	$('#ontv').button({icons:{primary:'ui-icon-extlink'}});

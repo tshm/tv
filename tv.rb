@@ -16,16 +16,16 @@ TVDIR = "public/video"
 # recorded item entity.
 # use ruby internal hash to identify each instance.
 class Item
-	attr_reader :ch, :title, :mpgname, :flvname, :time
+	attr_reader :ch, :title, :mpgname, :url, :time
 
-	def initialize(flvname)
-		dum, dum, date_ch, ename, hour, min, ext = flvname.split(/[\/_.]/)
+	def initialize(url)
+		dum, dum, date_ch, ename, hour, min, ext = url.split(/[\/_.]/)
 		mpgname = Dir["#{TVDIR}/#{date_ch}_*_#{hour}.#{min}.mpg"][0]
 		return nil unless mpgname
 		h = {}
 		@mpgname = mpgname.sub(/public/,'')
 		@title = mpgname.sub(/.*\/.+_(.+)_.+\.mpg/,'\1')
-		@flvname = flvname.sub(/public/,'')
+		@url = url.sub(/public/,'')
 		@ch = date_ch.sub(/\d+/,'')
 		date_ch =~ /^(..)(..)(..).*/
 		@time = Time.local($1, $2, $3, hour, min)
@@ -33,14 +33,14 @@ class Item
 	end
 
 	def self.list(sort_key=nil)
-		items = Dir["#{TVDIR}/*.flv"].map {|flvname| Item.new(flvname)}.compact.reject {|i| nil == i.time}
+		items = Dir["#{TVDIR}/*.{flv,mp4}"].map {|file| Item.new(file)}.compact.reject {|i| nil == i.time}
 		sort_key ? items.sort_by {|i| i.__send__(sort_key)} : items
 	end
 
 	def delete
 		File.delete("public/" + @mpgname)
-		File.delete("public/" + @flvname)
-		[mpgname, flvname]
+		File.delete("public/" + @url)
+		[mpgname, url]
 	end
 end
 
