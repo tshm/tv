@@ -21,11 +21,10 @@ function run() {
 			.parent().buttonset();
 	}).click(function(e){
 		var row = $(e.target).closest("tr");
-		playerelem.removeClass("playing").removeClass("playing-2x");
 		if ($(e.target).closest('a').attr('class').match("2x")) {
-			playerelem.addClass("playing-2x")
+			playerelem.attr("class", "playing-2x")
 		} else {
-			playerelem.addClass("playing")
+			playerelem.attr("class", "playing")
 		}
 		videodialog.dialog("open");
 		videodialog.dialog("option", {
