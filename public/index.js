@@ -1,6 +1,6 @@
 function run() {
 	// video player dialog
-	var control = $('#control').find('button').button();
+	var control = $('#control').hide().find('button').button();
 	var videodialog = $('#videodialog');
 	videodialog.dialog({autoOpen:false, modal:true, position:[0,0]});
 	var playerelem = $('#player');
@@ -31,10 +31,18 @@ function run() {
 			width: playerelem.width() + 30, 
 			title: row.data("title")
 		});
+		// setup video url
+		$('video').attr('src', row.data('url'));
+		var flowplayer_config = "config={'clip': {'scaling':'fit', 'url': '" + row.data("url") + "', 'provider': 'nginx' }, 'plugins': { 'nginx': { 'url': '/flowplayer/flowplayer.pseudostreaming-3.2.7.swf' } }}"
+		$('param[name="flashvars"]').attr('value', flowplayer_config);
+		VideoJS.setup('All');
+		$('#player').attr("style","");
+		/*
 		playerelem.flowplayer("flowplayer/flowplayer-3.2.7.swf", {
 			clip: { url: row.data("url"), provider: 'nginx' },
 			plugins: { nginx: { url: '/flowplayer/flowplayer.pseudostreaming-3.2.7.swf' } }
 		});
+		*/
 		control.click(function(e){
 			var player = $f();
 			var time = player.getTime();
