@@ -37,12 +37,6 @@ function run() {
 		$('param[name="flashvars"]').attr('value', flowplayer_config);
 		VideoJS.setup('All');
 		$('#player').attr("style","");
-		/*
-		playerelem.flowplayer("flowplayer/flowplayer-3.2.7.swf", {
-			clip: { url: row.data("url"), provider: 'nginx' },
-			plugins: { nginx: { url: '/flowplayer/flowplayer.pseudostreaming-3.2.7.swf' } }
-		});
-		*/
 		control.click(function(e){
 			var player = $f();
 			var time = player.getTime();
