@@ -1,6 +1,5 @@
-%link(rel='stylesheet' href="/video-js/video-js.css")
-%script(src="/flowplayer/flowplayer-3.2.6.min.js")
-%script(src="/video-js/video.js")
+%link(rel="stylesheet" href="/jplayer/jplayer.blue.monday.css")
+%script(src="/jplayer/jquery.jplayer.min.js")
 %script(src="/index.js")
 - unless loggedin?
   %form(action='/login' method='post')
@@ -27,14 +26,8 @@
               %a.url(href="#{item.url}") download
               %a.mpg(href="#{item.mpgname}") download mpg
             %button.delete DELETE
-  #videodialog.hidden
+  #videodialog
     #player.playing
-      %video.video-js(width=300 height=200)
-        %source(src="" type='video/mp4')
-        %object.vjs-flash-fallback(type="application/x-shockwave-flash" data="/flowplayer/flowplayer-3.2.7.swf" width=300 height=200)
-          %param(name="movie" value="/flowplayer/flowplayer-3.2.7.swf")
-          %param(name="allowfullscreen" value="true")
-          %param(name="flashvars" value="")
     #control
       %button#start |&lt;
       %button#revL  &lt;&lt;

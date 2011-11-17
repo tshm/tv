@@ -1,9 +1,9 @@
 function run() {
 	// video player dialog
-	var control = $('#control').hide().find('button').button();
+	var control = $('#control').find('button').button();
 	var videodialog = $('#videodialog');
 	videodialog.dialog({autoOpen:false, modal:true, position:[0,0]});
-	var playerelem = $('#player');
+	var player = $('#player');
 	// Delete button binding
 	$('.delete').click(function(e){
 		var row = $(this).closest('tr');
@@ -21,34 +21,23 @@ function run() {
 			.parent().buttonset();
 	}).click(function(e){
 		var row = $(e.target).closest("tr");
-		if ($(e.target).closest('a').attr('class').match("2x")) {
-			playerelem.attr("class", "playing-2x")
-		} else {
-			playerelem.attr("class", "playing")
-		}
-		videodialog.dialog("open");
+		var cls = $(e.target).closest('a').attr('class').match("2x") ? "playing-2x" : "playing";
 		videodialog.dialog("option", {
-			width: playerelem.width() + 30, 
-			title: row.data("title")
+			width: player.width() + 30, 
+			title: row.data("title"),
+			close: function() { player.jPlayer("destroy"); }
 		});
-		// setup video url
-		$('video').attr('src', row.data('url'));
-		var flowplayer_config = "config={'clip': {'scaling':'fit', 'url': '" + row.data("url") + "', 'provider': 'nginx' }, 'plugins': { 'nginx': { 'url': '/flowplayer/flowplayer.pseudostreaming-3.2.7.swf' } }}"
-		$('param[name="flashvars"]').attr('value', flowplayer_config);
-		VideoJS.setup('All');
-		$('#player').attr("style","");
-		control.click(function(e){
-			var player = $f();
-			var time = player.getTime();
-			switch (e.target.id) {
-			case "start": time  =  0.0; break;
-			case "revL":  time -= 30.0; break;
-			case "rev":   time -= 10.0; break;
-			case "fwd":   time += 10.0; break;
-			case "fwdL":  time += 30.0; break;
-			default: return;
-			}
-			player.seek(time);
+		videodialog.dialog("open");
+		// setup player
+		player.jPlayer({
+			ready: function () {
+				$(this).jPlayer("setMedia", { m4v: row.data("url") });
+				$(this).jPlayer("play");
+			},
+			//size: {width: w, height: h},
+			size: {cssClass: cls},
+			swfPath: "/jplayer",
+			supplied: "m4v"
 		});
 		return false;
 	});
