@@ -1,4 +1,3 @@
-%link(rel="stylesheet" href="/jplayer/jplayer.blue.monday.css")
 %script(src="/jplayer/jquery.jplayer.min.js")
 %script(src="/index.js")
 - unless loggedin?
@@ -29,10 +28,15 @@
   #videodialog
     #player.playing
     #control
-      %button#start |&lt;
-      %button#revL  &lt;&lt;
-      %button#rev   &lt;
-      %button#fwd   &gt;
-      %button#fwdL  &gt;&gt;
+      #progress.hidden
+      %span#seek
+        %button#start.seek-first seek first
+        %button#revL.seek-prev   seek prev long
+        %button#rev.carat-1-w    seek prev
+        %button#fwd.carat-1-e    seek next
+        %button#fwdL.seek-next   seek next long
+      %span#volume
+        %button#voldown.volume-off vol down
+        %button#volup.volume-on    vol up
   :javascript
     jQuery(run);

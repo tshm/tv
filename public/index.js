@@ -1,9 +1,15 @@
 function run() {
+	vol = 0.8;
 	// video player dialog
-	var control = $('#control').find('button').button();
-	var videodialog = $('#videodialog');
-	videodialog.dialog({autoOpen:false, modal:true, position:[0,0]});
-	var player = $('#player');
+	var $control = $('#control');
+	$control.find('button').each(function(){
+		$(this).button({text:false, icons:{primary:"ui-icon-"+$(this).attr('class')}});
+	});
+	var $progress = $('#progress').progressbar({value: 30}).slider();
+	var $volume = $('#volume').buttonset();
+	var $videodialog = $('#videodialog');
+	$videodialog.dialog({autoOpen:false, modal:true, position:[0,0]});
+	var $player = $('#player');
 	// Delete button binding
 	$('.delete').click(function(e){
 		var row = $(this).closest('tr');
@@ -22,22 +28,48 @@ function run() {
 	}).click(function(e){
 		var row = $(e.target).closest("tr");
 		var cls = $(e.target).closest('a').attr('class').match("2x") ? "playing-2x" : "playing";
-		videodialog.dialog("option", {
-			width: player.width() + 30, 
+		$player.attr({style: "", class: cls});
+		var w = $player.width(), h = $player.height();
+		$videodialog.dialog("option", {
+			width: $player.width() + 30, 
 			title: row.data("title"),
-			close: function() { player.jPlayer("destroy"); }
+			close: function() { $player.jPlayer("destroy"); }
 		});
-		videodialog.dialog("open");
+		$videodialog.dialog("open");
 		// setup player
-		player.jPlayer({
+		$player.jPlayer({
 			ready: function () {
-				$(this).jPlayer("setMedia", { m4v: row.data("url") });
-				$(this).jPlayer("play");
+				$(this).jPlayer("setMedia", { m4v: row.data("url") }).jPlayer("play");
 			},
-			//size: {width: w, height: h},
-			size: {cssClass: cls},
+			click: function(e) {
+				$(this).jPlayer(e.jPlayer.status.paused ? "play" : "pause");
+			},
+			size: {width: w, height: h},
+			//nativeVideoControls: {all: /.*/},
 			swfPath: "/jplayer",
 			supplied: "m4v"
+		});
+		// control
+		$control.find('button').click(function(e) {
+			var stat = $player.data("jPlayer").status;
+			if ("volume" == this.parentNode.id) {
+				vol += ("volup" == this.id ? +0.1 : -0.1);
+				if (vol < 0.0) vol = 0.0;
+				if (1.0 < vol) vol = 1.0;
+				$('#volume button').attr('title', vol);
+				$player.jPlayer("volume", vol);
+			} else {
+				var time = stat.currentTime;
+				switch(this.id) {
+				case "start": time  =  0.0; break;
+				case "revL":  time -= 30.0; break;
+				case "rev":   time -= 10.0; break;
+				case "fwd":   time += 10.0; break;
+				case "fwdL":  time += 30.0; break;
+				default: return;
+				}
+				$player.jPlayer(stat.paused ? "pause" : "play", time);
+			}
 		});
 		return false;
 	});
