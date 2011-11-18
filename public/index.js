@@ -5,7 +5,7 @@ function run() {
 	$control.find('button').each(function(){
 		$(this).button({text:false, icons:{primary:"ui-icon-"+$(this).attr('class')}});
 	});
-	var $progress = $('#progress').progressbar({value: 30}).slider();
+	var $progress = $('#progress').progressbar().height(8);
 	var $volume = $('#volume').buttonset();
 	var $videodialog = $('#videodialog');
 	$videodialog.dialog({autoOpen:false, modal:true, position:[0,0]});
@@ -32,17 +32,26 @@ function run() {
 		var w = $player.width(), h = $player.height();
 		$videodialog.dialog("option", {
 			width: $player.width() + 30, 
-			title: row.data("title"),
 			close: function() { $player.jPlayer("destroy"); }
 		});
 		$videodialog.dialog("open");
 		// setup player
 		$player.jPlayer({
 			ready: function () {
-				$(this).jPlayer("setMedia", { m4v: row.data("url") }).jPlayer("play");
+				$(this).jPlayer("setMedia", {m4v: row.data("url") }).jPlayer("play");
 			},
 			click: function(e) {
 				$(this).jPlayer(e.jPlayer.status.paused ? "play" : "pause");
+			},
+			timeupdate: function(e) {
+				var stat = e.jPlayer.status;
+				$progress.progressbar({value: stat.currentPercentAbsolute});
+			},
+			progress: function(e) {
+				var stat = e.jPlayer.status;
+				var dur = $.jPlayer.convertTime(stat.duration);
+				console.log(stat);
+				$videodialog.dialog("option", {title: row.data("title") + " / " + dur});
 			},
 			size: {width: w, height: h},
 			//nativeVideoControls: {all: /.*/},
