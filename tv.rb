@@ -1,9 +1,8 @@
 #!/usr/bin/ruby
 begin
 	require "rubygems"
-	#require "bundler/setup"
-	require "haml"
 	require "sinatra"
+	require "json"
 end
 if "live"==ARGV[0]
 	set :environment, :production
@@ -12,7 +11,6 @@ else
 	require "pp"
 end
 TVDIR = "public/video"
-set :haml, {:format => :html5}
 
 # recorded item entity.
 # use ruby internal hash to identify each instance.
@@ -38,6 +36,16 @@ class Item
 		sort_key ? items.sort_by {|i| i.__send__(sort_key)} : items
 	end
 
+	def to_json(*a)
+		hash = {}
+		hash[:ch] = @ch
+		hash[:title] = @title
+		hash[:mpgname] = @mpgname
+		hash[:url] = @url
+		hash[:time] = @time
+		hash.to_json(*a)
+	end
+
 	def delete
 		File.delete("public/" + @mpgname)
 		File.delete("public/" + @url)
@@ -61,8 +69,12 @@ helpers do
 end
 
 get '/' do
-	@items = Item.list((request["sort"] || :time).to_sym)
-	haml :index
+	redirect '/index.html'
+end
+
+get '/items' do
+	content_type :json
+	Item.list((request["sort"] || :time).to_sym).to_json
 end
 
 post '/login' do
@@ -86,9 +98,8 @@ get '/logout' do
 	redirect '/'
 end
 
-get '/delete' do
+post '/delete' do
 	if loggedin?
-		a = Item.new(params["pathname"]).delete
-		"Deleted: #{a[0]} & #{a[1]}"
+		Item.new(params["path"]).delete
 	end
 end
