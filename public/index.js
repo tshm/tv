@@ -12,7 +12,7 @@ var Item = function(hash) {
 Item.prototype.play = function(item, event) {
 	var self = this;
 	console.log([item, event]);
-	var cls = $(event.target).closest('a').attr('class').match("2x") ? "playing-2x" : "playing";
+	var cls = "playing" + $(event.target).closest('a').data('size');
 	$player.attr({style: "", class: cls});
 	var w = $player.width(), h = $player.height();
 	$videodialog.dialog("option", {
@@ -78,8 +78,8 @@ var ViewModel = function() {
 	// button markup
 	self.markup = function(elem) {
 		var tr = $(elem[1]);  // foreach includes <TextNode>'s
-		tr.find('a.link').button({icons:{primary:'ui-icon-play'}});
-		tr.find('a.2x').button({text:false, icons:{primary:'ui-icon-arrow-4-diag'}})
+		tr.find('a.play').button({icons:{primary:'ui-icon-play'}});
+		tr.find('a.play2x').button({text:false, icons:{primary:'ui-icon-arrow-4-diag'}})
 		.parent().buttonset();
 		tr.find('a.url').button({text: false, icons: {primary: 'ui-icon-video'}})
 		.next().button({text: false, icons: {primary: 'ui-icon-script'}})
@@ -92,9 +92,13 @@ ko.applyBindings(viewModel);
 
 $(function() {
 	var $form = $('form');
+	$form.find('input').button();
 	$.get('/items', function(data) {
-		//console.log(data);
-		if (data.length > 0) { $form.hide(); }
+		if (!data) {
+			$form.show();
+			return;
+		}
+		$('#list').show();
 		for (var i=0, o; o = data[i]; i++) {
 			viewModel.items.push(new Item(o));
 		}

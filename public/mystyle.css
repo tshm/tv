@@ -31,5 +31,5 @@ td, th { border: 1px solid; }
 #control { text-align: center; }
 
 /* video cast elements */
-.playing {display:block; width:400px; height:300px;}
-.playing-2x {display:block; width:800px; height:600px;}
+.playing1x {display:block; width:400px; height:300px;}
+.playing2x {display:block; width:800px; height:600px;}

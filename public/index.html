@@ -7,10 +7,10 @@
     <title>TV</title>
   </head>
   <body class='flick'>
-    <form action='/login' method='post'>
+    <form action='/login' method='post' class='hidden'>
       <input type='submit' value='login'/>
     </form>
-    <table id='list'>
+    <table id='list' class='hidden'>
       <thead>
         <tr>
           <th>date/time</th>
@@ -25,8 +25,8 @@
           <td data-bind='text: ch'>CH</td>
           <td>
             <div class='playbuttons' data-bind='click: play'>
-							<a class='link' data-bind='{text: title, attr: {href:url}}'>play</a>
-              <a class='2x' href='#'>play 2x</a>
+							<a class='play' data-size='1x' data-bind='text: title'>play</a>
+              <a class='play2x' data-size='2x' href='#'>play 2x</a>
             </div>
           </td>
           <td>
@@ -40,7 +40,7 @@
       </tbody>
     </table>
     <div class='hidden' id='videodialog'>
-      <div class='playing' id='player'></div>
+      <div class='playing2x' id='player'></div>
       <div id='control'>
         <div id='progress'></div>
         <span id='seek'>

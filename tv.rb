@@ -74,7 +74,9 @@ end
 
 get '/items' do
 	content_type :json
-	Item.list((request["sort"] || :time).to_sym).to_json
+	if loggedin?
+		Item.list((request["sort"] || :time).to_sym).to_json
+	end
 end
 
 post '/login' do
