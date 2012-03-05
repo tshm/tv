@@ -1,16 +1,30 @@
 #!/usr/bin/ruby
-begin
+begin  # initialization
 	require "rubygems"
 	require "sinatra"
 	require "json"
+  if "live"==ARGV[0]
+    set :environment, :production
+  else
+    require "sinatra/reloader"
+    require "pp"
+  end
+  TVDIR = "public/video"
+  # OpenID
+  require "rack/openid"
+  use Rack::OpenID
+  # use session for login state management
+  use Rack::Session::Cookie
+  enable :sessions
+  # load application config
+  begin
+    require 'yaml'
+    conf = YAML.load_file('conf.yaml')
+    USER = conf[:user]
+  rescue
+    USER = nil
+  end
 end
-if "live"==ARGV[0]
-	set :environment, :production
-else
-	require "sinatra/reloader"
-	require "pp"
-end
-TVDIR = "public/video"
 
 # recorded item entity.
 # use ruby internal hash to identify each instance.
@@ -32,8 +46,14 @@ class Item
 	end
 
 	def self.list(sort_key=nil)
-		items = Dir["#{TVDIR}/*.{flv,mp4}"].map {|file| Item.new(file)}.compact.reject {|i| nil == i.time}
-		sort_key ? items.sort_by {|i| i.__send__(sort_key)} : items
+    items = 
+      Dir["#{TVDIR}/*.{flv,mp4}"].map {|file| Item.new(file)}.
+        compact.reject {|i| nil == i.time}
+		if sort_key 
+      items.sort_by {|i| i.__send__(sort_key)}
+    else
+      items
+    end
 	end
 
 	def to_json(*a)
@@ -53,18 +73,12 @@ class Item
 	end
 end
 
-USER = "shimayama@gmail.com"
-use Rack::Session::Cookie
-require "rack/openid"
-use Rack::OpenID
-enable :sessions
-
 helpers do
 	def loggedin?
 		:development == Sinatra::Application.environment or session[:loggedin]
 	end
 	def authenticate(email)
-		session[:loggedin] = USER == email
+		session[:loggedin] = (USER == email)
 	end
 end
 

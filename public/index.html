@@ -19,22 +19,22 @@
           <td>DL | Delete</td>
         </tr>
       </thead>
-			<tbody data-bind='foreach: {data: items, afterRender: markup}'>
-				<tr data-bind='attr: {"data-title": title, "data-url": url}'>
+      <tbody data-bind='foreach: {data: items, afterRender: markup}'>
+        <tr data-bind='attr: {"data-title": title, "data-url": url}'>
           <th data-bind='text: time'>date/time</th>
           <td data-bind='text: ch'>CH</td>
           <td>
             <div class='playbuttons' data-bind='click: play'>
-							<a class='play' data-size='1x' data-bind='text: title'>play</a>
+              <a class='play' data-size='1x' data-bind='text: title'>play</a>
               <a class='play2x' data-size='2x' href='#'>play 2x</a>
             </div>
           </td>
           <td>
             <span>
-							<a class='url' data-bind='attr: {href: url}'>download</a>
-							<a class='mpg' data-bind='attr: {href: mpgname}'>download mpg</a>
+              <a class='url' data-bind='attr: {href: url}'>download</a>
+              <a class='mpg' data-bind='attr: {href: mpgname}'>download mpg</a>
             </span>
-						<button class='delete' data-bind='click: remove'>DELETE</button>
+            <a class='delete' data-bind='click: remove'>DELETE</a>
           </td>
         </tr>
       </tbody>
@@ -46,7 +46,7 @@
         <span id='seek'>
           <button class='seek-first' id='start'>seek first</button>
           <button class='seek-prev' id='revL'>seek prev long</button>
-					<!-- -->
+          <!-- -->
           <button class='carat-1-w' id='rev'>seek prev</button>
           <button class='carat-1-e' id='fwd'>seek next</button>
           <button class='seek-next' id='fwdL'>seek next long</button>
