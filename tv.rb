@@ -20,8 +20,9 @@ begin  # initialization
   begin
     require 'yaml'
     conf = YAML.load_file('conf.yaml')
-    USER = conf[:user]
+    USER = conf["user"]
   rescue
+    puts "user needs to be configured in conf.yaml"
     USER = nil
   end
 end
