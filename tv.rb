@@ -7,6 +7,7 @@ begin  # initialization
     set :environment, :production
   else
     require "sinatra/reloader"
+		require "ruby-debug/pry"
     require "pp"
   end
   TVDIR = "public/video"
