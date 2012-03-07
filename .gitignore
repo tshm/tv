@@ -7,3 +7,4 @@ tmp
 .bundle
 vendor
 conf.yaml
+public/bkup
